@@ -1,5 +1,7 @@
 const chrono = require('chrono-node');
 
+const IST_OFFSET_MINUTES = 330; // India Standard Time = UTC+5:30
+
 /**
  * Parses free-text reminder messages like:
  *  - "remind meet at 12:30pm"
@@ -7,10 +9,17 @@ const chrono = require('chrono-node');
  *  - "remind me to call ravi at 5pm"
  *  - "team standup tomorrow 10am"
  *
+ * All times in the message are interpreted as India Standard Time (IST),
+ * regardless of what timezone the server itself runs in (Render runs UTC).
+ *
  * Returns { task, time } or null if no time could be found.
  */
 function parseReminder(text, referenceDate = new Date()) {
-  const results = chrono.parse(text, referenceDate, { forwardDate: true });
+  const results = chrono.parse(
+    text,
+    { instant: referenceDate, timezone: IST_OFFSET_MINUTES },
+    { forwardDate: true }
+  );
 
   if (!results || results.length === 0) {
     return null;
