@@ -87,7 +87,8 @@ app.post('/webhook.php', async (req, res) => {
     });
 
     const timeStr = parsed.time.toLocaleString('en-IN', {
-      hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short'
+      hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short',
+      timeZone: 'Asia/Kolkata'
     });
 
     await sendWhatsAppMessage(
